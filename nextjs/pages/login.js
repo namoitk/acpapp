@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 
 // Import logos (make sure to use direct links to image files)
-const basketballLogo = "https://upload.wikimedia.org/wikipedia/en/3/3c/National_Basketball_Association_logo.svg"; // Replace with actual path
-const nbaLogo = "https://upload.wikimedia.org/wikipedia/en/3/3c/National_Basketball_Association_logo.svg"; // Replace with actual path
+const basketballLogo = "https://upload.wikimedia.org/wikipedia/en/6/6c/World_Basketball_Association_logo.png"; // Replace with actual path
+const nbaLogo = "https://upload.wikimedia.org/wikipedia/en/thumb/0/03/National_Basketball_Association_logo.svg/320px-National_Basketball_Association_logo.svg.png"; // Replace with actual path
 
 export default function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
@@ -26,6 +27,7 @@ export default function LoginPage() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
     try {
       const response = await fetch("/api/users/login", {
         method: "POST",
@@ -55,6 +57,10 @@ export default function LoginPage() {
       setSnackbarMessage(error.message);
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
+      setLoginEmail(""); // Clear the email input
+      setLoginPassword(""); // Clear the password input
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -66,7 +72,7 @@ export default function LoginPage() {
         height: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#212121", // Changed to match the register page background color
+        backgroundColor: "#212121", // Background color
         position: "relative",
       }}
     >
@@ -76,10 +82,11 @@ export default function LoginPage() {
         alt="Basketball Logo"
         style={{
           position: "absolute",
-          top: "20px",
+          top: "150px", // Adjusted to be lower
           left: "50%",
           transform: "translateX(-50%)",
           width: "100px", // Adjust the size as needed
+          zIndex: 1, // Ensure it is above the login box
         }}
       />
 
@@ -91,6 +98,8 @@ export default function LoginPage() {
             backgroundColor: "#000", // Black login box
             borderRadius: "8px",
             width: '100%', // Ensure full width of the grid item
+            position: 'relative', // Positioned element for overlapping
+            zIndex: 0, // Ensure it is below the logo
           }}
         >
           <Typography variant="h5" gutterBottom style={{ color: "#fff" }}>
@@ -125,8 +134,9 @@ export default function LoginPage() {
               fullWidth
               style={{ marginTop: "16px" }}
               type="submit"
+              disabled={loading} // Disable button when loading
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
         </Paper>
@@ -147,19 +157,25 @@ export default function LoginPage() {
         </Grid>
       </Grid>
 
-      {/* NBA Logo at the bottom left */}
+      {/* NBA Logo at the bottom right */}
       <img
         src={nbaLogo}
         alt="NBA Logo"
         style={{
           position: "absolute",
-          bottom: "20px",
-          left: "20px",
+          bottom: "60px",
+          right: "40px", // Changed to right
           width: "80px", // Adjust the size as needed
+          zIndex: 1, // Ensure it is above the background
         }}
       />
 
-      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Snackbar 
+        open={openSnackbar} 
+        autoHideDuration={6000} 
+        onClose={handleSnackbarClose} 
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Top center
+      >
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
