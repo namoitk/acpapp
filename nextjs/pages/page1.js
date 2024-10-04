@@ -2,32 +2,32 @@ import { Box, Paper, createTheme, ThemeProvider, CssBaseline } from "@mui/materi
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
-// Dark mode theme with global background color
+
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',  // Enables dark mode
+    mode: 'dark',  
     background: {
-      default: "#121212",  // Dark background for the entire page
-      paper: "#333",       // Paper color for containers
+      default: "#121212",  
+      paper: "#333",      
     },
     text: {
-      primary: "#ffffff",  // Text color for primary text
+      primary: "#ffffff",  
     },
   },
   components: {
     MuiDataGrid: {
       styleOverrides: {
         root: {
-          border: '1px solid #555',  // Table border color
-          color: '#ffffff',          // Table text color
+          border: '1px solid #555',  
+          color: '#ffffff',      
         },
         columnHeaders: {
-          backgroundColor: '#1976d2',  // Header background color
-          color: '#ffffff',            // Header text color
+          backgroundColor: '#1976d2',  
+          color: '#ffffff',           
         },
         row: {
           '&:hover': {
-            backgroundColor: '#333',  // Row hover background color
+            backgroundColor: '#333',
           },
         },
       },
@@ -94,9 +94,9 @@ export default function DarkModePage() {
       <CssBaseline /> {/* Adds global dark mode styles */}
       <Box
         sx={{
-          height: '100vh', // Ensures it covers the full viewport
-          width: '100vw', // Full width of the viewport
-          backgroundColor: "background.default", // Uses the theme background
+          height: '100vh', 
+          width: '100vw', 
+          backgroundColor: "background.default", 
           padding: 2,
           borderRadius: 2,
           display: 'flex',
