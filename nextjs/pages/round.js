@@ -88,27 +88,27 @@ const Line2 = styled('svg')({
 
 const VerticalLine = styled('div')({
   width: '1px',
-  height: '186.5px',
+  height: '186.5px', // Adjust height as needed
   backgroundColor: 'white',
   position: 'absolute',
 });
 
 const HorizontalLine = styled('div')({
   width: '1px',
-  height: '186.5px', 
+  height: '186.5px', // Adjust height as needed
   backgroundColor: 'white',
   position: 'absolute',
 });
 
 const HorizontalLine2 = styled('div')({
-  width: '50px', 
+  width: '50px', // Adjust width as needed
   height: '1px',
   backgroundColor: 'white',
   position: 'absolute',
 });
 
 const HorizontalLine3 = styled('div')({
-  width: '27.5px', 
+  width: '31px', // Adjust width as needed
   height: '1px',
   backgroundColor: 'white',
   position: 'absolute',
@@ -118,8 +118,8 @@ function HorizontalLineComponent3({ leftPosition, topPosition }) {
   return (
     <HorizontalLine3
       style={{
-        left: leftPosition,  
-        top: topPosition,    
+        left: leftPosition,  // Adjust the horizontal position
+        top: topPosition,    // Adjust the vertical position
       }}
     />
   );
@@ -129,8 +129,8 @@ function HorizontalLineComponent({ leftPosition, topPosition }) {
   return (
     <HorizontalLine2
       style={{
-        left: leftPosition,  
-        top: topPosition,    
+        left: leftPosition,  // Adjust the horizontal position
+        top: topPosition,    // Adjust the vertical position
       }}
     />
   );
@@ -141,7 +141,7 @@ function VerticalLineComponent({ leftPosition, topPosition }) {
   return (
     <VerticalLine
       style={{
-        left: leftPosition, 
+        left: leftPosition, // Adjust the position based on where you want the line
         top: topPosition,
       }}
     />
@@ -204,7 +204,7 @@ function FrameWithLineBottom2({ frameName, lineStartY }) {
   );
 }
 
-
+// New component to render Frame 11 and Frame 12 with two horizontal lines
 function FrameWithLines({ frameName }) {
   return (
     <CustomHeightItem>
