@@ -9,9 +9,9 @@ import {
   Alert,
 } from "@mui/material";
 
-// Import logos (make sure to use direct links to image files)
-const basketballLogo = "https://upload.wikimedia.org/wikipedia/en/6/6c/World_Basketball_Association_logo.png"; // Replace with actual path
-const nbaLogo = "https://upload.wikimedia.org/wikipedia/en/thumb/0/03/National_Basketball_Association_logo.svg/320px-National_Basketball_Association_logo.svg.png"; // Replace with actual path
+// Import logos
+const basketballLogo = "https://upload.wikimedia.org/wikipedia/en/6/6c/World_Basketball_Association_logo.png";
+const nbaLogo = "https://upload.wikimedia.org/wikipedia/en/thumb/0/03/National_Basketball_Association_logo.svg/320px-National_Basketball_Association_logo.svg.png";
 
 export default function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -19,7 +19,7 @@ export default function LoginPage() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true
+    setLoading(true);
     try {
       const response = await fetch("/api/users/login", {
         method: "POST",
@@ -51,16 +51,16 @@ export default function LoginPage() {
       setOpenSnackbar(true);
       
       // Navigate to page1 after successful login
-      window.location.href = "/page1"; // Change to your desired page
+      window.location.href = "/page1";
 
     } catch (error) {
       setSnackbarMessage(error.message);
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
-      setLoginEmail(""); // Clear the email input
-      setLoginPassword(""); // Clear the password input
+      setLoginEmail("");
+      setLoginPassword("");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -72,7 +72,7 @@ export default function LoginPage() {
         height: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#212121", // Background color
+        background: "linear-gradient(135deg, #3f51b5 30%, #f50057 90%)",
         position: "relative",
       }}
     >
@@ -82,27 +82,28 @@ export default function LoginPage() {
         alt="Basketball Logo"
         style={{
           position: "absolute",
-          top: "150px", // Adjusted to be lower
-          left: "50%",
+          top: "150px",
+          left: "53%",
           transform: "translateX(-50%)",
-          width: "100px", // Adjust the size as needed
-          zIndex: 1, // Ensure it is above the login box
+          width: "100px",
+          zIndex: 1,
         }}
       />
 
-      <Grid item xs={12} sm={4}> {/* Reduced width from 6 to 4 */}
+      <Grid item xs={12} sm={4}>
         <Paper
-          elevation={4}
+          elevation={6}
           style={{
             padding: "20px",
-            backgroundColor: "#000", // Black login box
-            borderRadius: "8px",
-            width: '100%', // Ensure full width of the grid item
-            position: 'relative', // Positioned element for overlapping
-            zIndex: 0, // Ensure it is below the logo
+            backgroundColor: "#121212",
+            borderRadius: "16px",
+            width: '100%',
+            position: 'relative',
+            zIndex: 0,
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)", // Added box shadow
           }}
         >
-          <Typography variant="h5" gutterBottom style={{ color: "#fff" }}>
+          <Typography variant="h5" gutterBottom style={{ color: "#fff", textAlign: 'center' }}>
             Login
           </Typography>
           <form onSubmit={handleLoginSubmit}>
@@ -114,8 +115,9 @@ export default function LoginPage() {
               type="email"
               value={loginEmail}
               onChange={(e) => setLoginEmail(e.target.value)}
-              InputLabelProps={{ style: { color: '#fff' } }} // White label
-              InputProps={{ style: { color: '#fff', backgroundColor: '#555' } }} // Grey input field
+              InputLabelProps={{ style: { color: '#fff' } }}
+              InputProps={{ style: { color: '#fff', backgroundColor: '#333', borderRadius: '8px' } }} // Rounded corners
+              sx={{ borderRadius: '8px' }} // MUI sx prop for customization
             />
             <TextField
               fullWidth
@@ -125,16 +127,23 @@ export default function LoginPage() {
               type="password"
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
-              InputLabelProps={{ style: { color: '#fff' } }} // White label
-              InputProps={{ style: { color: '#fff', backgroundColor: '#555' } }} // Grey input field
+              InputLabelProps={{ style: { color: '#fff' } }}
+              InputProps={{ style: { color: '#fff', backgroundColor: '#333', borderRadius: '8px' } }} // Rounded corners
+              sx={{ borderRadius: '8px' }} // MUI sx prop for customization
             />
             <Button
               variant="contained"
               color="primary"
               fullWidth
-              style={{ marginTop: "16px" }}
+              style={{ marginTop: "16px", borderRadius: '8px' }} // Rounded button
               type="submit"
-              disabled={loading} // Disable button when loading
+              disabled={loading}
+              sx={{
+                transition: 'background-color 0.3s',
+                '&:hover': {
+                  backgroundColor: '#1976d2', // Lighter blue on hover
+                },
+              }}
             >
               {loading ? "Logging in..." : "Login"}
             </Button>
@@ -150,7 +159,7 @@ export default function LoginPage() {
             variant="contained"
             color="primary"
             href="/register"
-            style={{ backgroundColor: '#2196F3', padding: '6px 12px' }} // Adjusted padding for button
+            style={{ backgroundColor: '#2196F3', padding: '6px 12px', borderRadius: '8px' }} // Rounded button
           >
             Register
           </Button>
@@ -164,9 +173,9 @@ export default function LoginPage() {
         style={{
           position: "absolute",
           bottom: "60px",
-          right: "40px", // Changed to right
-          width: "80px", // Adjust the size as needed
-          zIndex: 1, // Ensure it is above the background
+          right: "40px",
+          width: "80px",
+          zIndex: 1,
         }}
       />
 
@@ -174,7 +183,7 @@ export default function LoginPage() {
         open={openSnackbar} 
         autoHideDuration={6000} 
         onClose={handleSnackbarClose} 
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Top center
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button, Grid, Typography, Paper, Snackbar, Alert } from '@mui/material';
+import Link from 'next/link'; // Import Link from next/link
 
 export default function AuthPage() {
   const [registerName, setRegisterName] = useState('');
@@ -9,6 +10,7 @@ export default function AuthPage() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [registrationSuccessful, setRegistrationSuccessful] = useState(false); // Track registration success
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
@@ -45,7 +47,7 @@ export default function AuthPage() {
       setSnackbarMessage('Registration successful!');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
-      // Handle successful registration (e.g., redirect)
+      setRegistrationSuccessful(true); // Set registration as successful
     } catch (error) {
       setSnackbarMessage(error.message);
       setSnackbarSeverity('error');
@@ -54,10 +56,10 @@ export default function AuthPage() {
   };
 
   return (
-    <Grid container spacing={2} style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#212121' }}>
+    <Grid container spacing={2} style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', background: 'linear-gradient(135deg, #3f51b5 30%, #f50057 90%)' }}>
       {/* Register Section */}
-      <Grid item xs={12} sm={6}>
-        <Paper elevation={3} style={{ padding: '20px', backgroundColor: '#121212', color: '#fff' }}>
+      <Grid item xs={12} sm={4}>
+        <Paper elevation={6} style={{ padding: '20px', backgroundColor: '#121212', color: '#fff', borderRadius: '16px', width: '100%', boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)" }}>
           <Typography variant="h5" gutterBottom align="center">
             Register
           </Typography>
@@ -70,7 +72,7 @@ export default function AuthPage() {
               value={registerName}
               onChange={(e) => setRegisterName(e.target.value)}
               InputProps={{
-                style: { backgroundColor: '#424242', color: '#fff' }, // Dark grey background for input
+                style: { backgroundColor: '#333', color: '#fff' }, // Dark background for input
               }}
               InputLabelProps={{
                 style: { color: '#fff' }, // White label for input
@@ -85,7 +87,7 @@ export default function AuthPage() {
               value={registerEmail}
               onChange={(e) => setRegisterEmail(e.target.value)}
               InputProps={{
-                style: { backgroundColor: '#424242', color: '#fff' }, // Dark grey background for input
+                style: { backgroundColor: '#333', color: '#fff' }, // Dark background for input
               }}
               InputLabelProps={{
                 style: { color: '#fff' }, // White label for input
@@ -100,7 +102,7 @@ export default function AuthPage() {
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
               InputProps={{
-                style: { backgroundColor: '#424242', color: '#fff' }, // Dark grey background for input
+                style: { backgroundColor: '#333', color: '#fff' }, // Dark background for input
               }}
               InputLabelProps={{
                 style: { color: '#fff' }, // White label for input
@@ -115,16 +117,26 @@ export default function AuthPage() {
               value={registerConfirmPassword}
               onChange={(e) => setRegisterConfirmPassword(e.target.value)}
               InputProps={{
-                style: { backgroundColor: '#424242', color: '#fff' }, // Dark grey background for input
+                style: { backgroundColor: '#333', color: '#fff' }, // Dark background for input
               }}
               InputLabelProps={{
                 style: { color: '#fff' }, // White label for input
               }}
             />
-            <Button variant="contained" color="primary" fullWidth style={{ marginTop: '16px' }} type="submit">
+            <Button variant="contained" color="primary" fullWidth style={{ marginTop: '16px', borderRadius: '8px' }} type="submit">
               Register
             </Button>
           </form>
+
+          {/* Show this Link after successful registration */}
+          {registrationSuccessful && (
+            <Typography variant="body2" align="center" style={{ marginTop: '16px', color: '#fff' }}>
+              Already have an account?{' '}
+              <Link href="/login" style={{ color: '#2196F3', textDecoration: 'none' }}>
+                Login here
+              </Link>
+            </Typography>
+          )}
         </Paper>
       </Grid>
 

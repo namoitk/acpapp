@@ -65,15 +65,12 @@ const rows = [
   { id: 10, team: "Atlanta Hawks", region: "eastern", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/24/Atlanta_Hawks_logo.svg/1280px-Atlanta_Hawks_logo.svg.png" },
   { id: 11, team: "Brooklyn Nets", region: "eastern", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Brooklyn_Nets_primary_icon_logo_2024.svg/1280px-Brooklyn_Nets_primary_icon_logo_2024.svg.png" },
   { id: 12, team: "Toronto Raptors", region: "eastern", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/36/Toronto_Raptors_logo.svg/1280px-Toronto_Raptors_logo.svg.png" },
-  // More teams can be added here but will be ignored as per your requirements
 ];
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function LeaderboardPage() {
-  // Extract top three teams for the podium
   const podiumTeams = rows.slice(0, 3);
-  // Extract teams ranked 4 to 12 for the table
   const tableTeams = rows.slice(3, 12);
 
   return (
