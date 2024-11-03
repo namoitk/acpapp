@@ -1,6 +1,7 @@
-import { Box, Paper, createTheme, ThemeProvider, CssBaseline, Typography } from "@mui/material";
+import { Box, Paper, createTheme, ThemeProvider, CssBaseline, Typography,Button } from "@mui/material";
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { useRouter } from "next/router";
 
 const darkTheme = createTheme({
   palette: {
@@ -12,8 +13,22 @@ const darkTheme = createTheme({
     text: {
       primary: "#ffffff",
     },
+    primary: {
+      main: "#1976d2", // Customize primary color for a dark look
+    },
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: "#ffffff", // White text color for dark mode
+          backgroundColor: "#1976d2", // Dark blue background color
+          '&:hover': {
+            backgroundColor: "#115293", // Darker blue on hover
+          },
+        },
+      },
+    },
     MuiDataGrid: {
       styleOverrides: {
         root: {
@@ -33,6 +48,7 @@ const darkTheme = createTheme({
     },
   },
 });
+
 
 const columns = [
   {
@@ -72,6 +88,11 @@ const paginationModel = { page: 0, pageSize: 5 };
 export default function LeaderboardPage() {
   const podiumTeams = rows.slice(0, 3);
   const tableTeams = rows.slice(3, 12);
+  const router = useRouter(); // Initialize router for navigation
+
+  const handleBackToPage1 = () => {
+    router.push("/page1"); // Navigate back to Page1
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -87,6 +108,20 @@ export default function LeaderboardPage() {
           alignItems: 'center',
         }}
       >
+         <Button
+          variant="contained"
+          color="primary"
+          onClick={handleBackToPage1}
+          sx={{
+            color: "#ffffff",
+            backgroundColor: "#1976d2",
+            "&:hover": { backgroundColor: "#115293" },
+            mb: 2,
+          }}
+        >
+          Back to Page 1
+        </Button>
+
         {/* Podium Section */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
           {podiumTeams.map((team, index) => (

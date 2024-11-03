@@ -1,49 +1,62 @@
-import React from "react";
-import { Box, Grid, ThemeProvider, createTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Grid,
+  ThemeProvider,
+  createTheme,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 const FullPageContainer = styled(Box)({
-    height: "100vh",
-    backgroundColor: "#202020",
-    padding: "10px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  });
+  height: "100vh",
+  backgroundColor: "#202020",
+  padding: "10px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "flex-start",
+});
 
 // Styled rectangle box
 const RectangleBox = styled(Box)({
-    width: "92.8%",
-    height: "60px",
-    backgroundColor: "#505050",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: "30px",
-    marginTop: "50px",
-    borderRadius: "5px",
-  });
-  
+  width: "92.8%",
+  height: "60px",
+  backgroundColor: "#505050",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "30px",
+  marginTop: "50px",
+  borderRadius: "5px",
+});
 
 // Styled box for the container
 const ContainerBox = styled(Box)({
-    width: "100%",
-    height: "600px",
-    backgroundColor: "#505050",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    color: "white",
-    fontSize: "40px",
-    borderRadius: "5px",
-    marginBottom: "20px",
-    padding: "10px",
-  });
-// Sample data for the Eastern and Western teams
-const westTeams = [
+  width: "100%",
+  height: "600px",
+  backgroundColor: "#505050",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  color: "white",
+  fontSize: "40px",
+  borderRadius: "5px",
+  marginBottom: "20px",
+  padding: "10px",
+});
+
+const initialwestTeams = [
   {
     id: 1,
     team: "Boston Celtics",
@@ -136,7 +149,7 @@ const westTeams = [
   },
 ];
 
-const eastTeams = [
+const initialeastTeams = [
   {
     id: 16,
     team: "Oklahoma City Thunder",
@@ -229,44 +242,103 @@ const eastTeams = [
   },
 ];
 
-const columns = [
-    {
-      field: "logo",
-      headerName: "Logo",
-      width: 100,
-      renderCell: (params) => (
-        <img
-          src={params.value}
-          alt={params.row.team}
-          style={{ width: "50px", height: "50px" }}
-        />
-      ),
-    },
-    {
-      field: "team",
-      headerName: "Team Name",
-      width: 150,
-    },
-  ];
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-      background: {
-        default: "#202020",
-        paper: "#303030",
-      },
-      text: {
-        primary: "#FFFFFF",
-      },
+const columns = [
+  {
+    field: "logo",
+    headerName: "Logo",
+    width: 100,
+    renderCell: (params) => (
+      <img
+        src={params.value}
+        alt={params.row.team}
+        style={{ width: "50px", height: "50px" }}
+      />
+    ),
+  },
+  {
+    field: "team",
+    headerName: "Team Name",
+    width: 150,
+  },
+];
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    background: {
+      default: "#202020",
+      paper: "#303030",
     },
-  });
+    text: {
+      primary: "#FFFFFF",
+    },
+  },
+});
 
 
 export default function Page1() {
+  const router = useRouter(); // Initialize the router
+  const [userEmail, setUserEmail] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [westTeams, setWestTeams] = useState([]);  // State for Western teams
+  const [eastTeams, setEastTeams] = useState([]);  // State for Eastern teams
+
+  useEffect(() => {
+    // Check if the token exists
+    const token = Cookies.get("session_token");
+    if (!token) {
+      // If no token, redirect to login
+      router.push("/login");
+    }
+  }, [router]);
+  useEffect(() => {
+    const email = Cookies.get("user_email"); // assuming you stored user email in cookies during login
+    if (email) {
+      setUserEmail(email);
+    }
+  }, []);
+  useEffect(() => {
+    setWestTeams(initialwestTeams); // Populate with western teams
+    setEastTeams(initialeastTeams); // Populate with eastern teams
+  }, []);
+  
+  
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("session_token");
+    Cookies.remove("user_email"); // Remove user email cookie
+    router.push("/login"); // Redirect to login page
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <FullPageContainer>
+      <AppBar position="static" style={{ backgroundColor: "#333" }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Hi {userEmail || "Guest"}  {/* Show "Guest" if email is not available */}
+          </Typography>
+          <Button color="inherit" onClick={() => router.push("/leaderboard")}>Leaderboard</Button>
+          <IconButton edge="end" color="inherit" onClick={handleMenuClick}>
+            Menu
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        </Toolbar>
+      </AppBar>
         {/* Grid container for RectangleBox */}
         <Grid
           container

@@ -19,41 +19,42 @@ export default function AuthPage() {
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     if (registerPassword !== registerConfirmPassword) {
-      setSnackbarMessage('Passwords do not match');
-      setSnackbarSeverity('error');
-      setOpenSnackbar(true);
-      return;
+        setSnackbarMessage('Passwords do not match');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+        return;
     }
 
     try {
-      const response = await fetch('/api/users/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: registerName,
-          email: registerEmail,
-          password_hash: registerPassword,
-        }),
-      });
+        const response = await fetch('/api/users/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: registerName,
+                email: registerEmail,
+                password: registerPassword,  // Use 'password' instead of 'password_hash'
+            }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Registration failed');
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Registration failed');
+        }
 
-      const data = await response.json();
-      setSnackbarMessage('Registration successful!');
-      setSnackbarSeverity('success');
-      setOpenSnackbar(true);
-      setRegistrationSuccessful(true); // Set registration as successful
+        setSnackbarMessage('Registration successful!');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
+        setRegistrationSuccessful(true);
     } catch (error) {
-      setSnackbarMessage(error.message);
-      setSnackbarSeverity('error');
-      setOpenSnackbar(true);
+        setSnackbarMessage(error.message);
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
     }
-  };
+};
+
+
 
   return (
     <Grid container spacing={2} style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', background: 'linear-gradient(135deg, #3f51b5 30%, #f50057 90%)' }}>

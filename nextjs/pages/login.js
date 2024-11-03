@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Grid,
-  Typography,
-  Paper,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-
+import { TextField, Button, Grid, Typography, Snackbar, Alert, Paper } from "@mui/material";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Cookies from "js-cookie";  // Using js-cookie to handle authentication token
+import Link from 'next/link';  // Import Link from next.js for navigation
 // Import logos
+
 const basketballLogo = "https://upload.wikimedia.org/wikipedia/en/6/6c/World_Basketball_Association_logo.png";
 const nbaLogo = "https://upload.wikimedia.org/wikipedia/en/thumb/0/03/National_Basketball_Association_logo.svg/320px-National_Basketball_Association_logo.svg.png";
 
@@ -20,49 +16,57 @@ export default function LoginPage() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch("/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: loginEmail,
-          password_hash: loginPassword,
-        }),
-      });
+        const response = await fetch("/api/users/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                'username': loginEmail,  // OAuth2PasswordRequestForm uses 'username' field
+                'password': loginPassword,
+            }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Login failed");
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Login failed");
+        }
 
-      const data = await response.json();
-      setSnackbarMessage("Login successful!");
-      setSnackbarSeverity("success");
-      setOpenSnackbar(true);
-      
-      // Navigate to page1 after successful login
-      window.location.href = "/page1";
-
+        const data = await response.json();
+        Cookies.set('session_token', data.access_token, { expires: 1, path: '/' });
+        Cookies.set('user_email', loginEmail, { expires: 1, path: '/' });  // Store user email in cookies
+        setSnackbarMessage("Login successful!");
+        setSnackbarSeverity("success");
+        setOpenSnackbar(true);
+        
+        // Navigate to page1 after successful login
+        setTimeout(() => {
+            router.push("/page1");
+        }, 1000);
     } catch (error) {
-      setSnackbarMessage(error.message);
-      setSnackbarSeverity("error");
-      setOpenSnackbar(true);
-      setLoginEmail("");
-      setLoginPassword("");
+        setSnackbarMessage(error.message);
+        setSnackbarSeverity("error");
+        setOpenSnackbar(true);
+        setLoginEmail("");
+        setLoginPassword("");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
+  
 
   return (
     <Grid
